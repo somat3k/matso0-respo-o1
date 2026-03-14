@@ -562,8 +562,6 @@ segmentLengthInput.addEventListener('input', () => {
   });
 });
 
-
-
 deviceButtons.forEach((button) => {
   button.addEventListener('dragstart', (event) => {
     event.dataTransfer.setData('text/plain', button.dataset.type);
