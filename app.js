@@ -378,8 +378,7 @@ function getSelectedDevices() {
 }
 
 function updateSelectionSummary() {
-  selectionSummary.textContent =
-    selectedDeviceIds.size > 0 ? `Selected devices: ${selectedDeviceIds.size}` : 'No devices selected.';
+  selectionSummary.textContent = `Selected devices: ${selectedDeviceIds.size}`;
 }
 
 function setSelection(ids, activeId) {
