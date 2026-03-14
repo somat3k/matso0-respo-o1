@@ -219,6 +219,25 @@ body {
   border: 1px solid var(--border);
 }
 
+.form-group select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: white;
+}
+
+.device-form .toggle {
+  flex-direction: row;
+  align-items: center;
+}
+
+.device-form .toggle label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

@@ -7,7 +7,12 @@ const deviceButtons = document.querySelectorAll('.device-button');
 const projectionSummary = document.getElementById('projectionSummary');
 const deviceList = document.getElementById('deviceList');
 const selectionPrompt = document.getElementById('selectionPrompt');
+const selectionSummary = document.getElementById('selectionSummary');
 const deviceForm = document.getElementById('deviceForm');
+const activeSelectionGroup = document.getElementById('activeSelectionGroup');
+const activeDeviceSelect = document.getElementById('activeDeviceSelect');
+const applySelectionGroup = document.getElementById('applySelectionGroup');
+const applyToAllToggle = document.getElementById('applyToAll');
 const deviceName = document.getElementById('deviceName');
 const posX = document.getElementById('posX');
 const posY = document.getElementById('posY');
@@ -48,9 +53,9 @@ const deviceDefaults = {
 };
 
 let devices = [];
-let selectedDeviceId = null;
-let draggingId = null;
-let dragOffset = { x: 0, y: 0 };
+let selectedDeviceIds = new Set();
+let activeDeviceId = null;
+let draggingState = null;
 let deviceIdCounter = 1;
 
 const colors = {
@@ -169,11 +174,13 @@ function drawDevice(device) {
     ctx.strokeRect(device.x - 30, device.y - 8, 60, 16);
   }
 
-  if (device.id === selectedDeviceId) {
-    ctx.strokeStyle = 'rgba(109, 76, 255, 0.9)';
-    ctx.lineWidth = 2;
+  const isSelected = selectedDeviceIds.has(device.id);
+  const isActive = device.id === activeDeviceId;
+  if (isSelected) {
+    ctx.strokeStyle = isActive ? 'rgba(109, 76, 255, 0.9)' : 'rgba(148, 163, 184, 0.8)';
+    ctx.lineWidth = isActive ? 2 : 1.5;
     ctx.beginPath();
-    ctx.arc(device.x, device.y, 16, 0, Math.PI * 2);
+    ctx.arc(device.x, device.y, isActive ? 16 : 12, 0, Math.PI * 2);
     ctx.stroke();
   }
   ctx.restore();
@@ -366,19 +373,61 @@ function getCanvasPoint(event) {
   return { x, y };
 }
 
-function selectDevice(id) {
-  selectedDeviceId = id;
-  const device = getDeviceById(id);
-  if (!device) {
-    deviceForm.hidden = true;
-    selectionPrompt.hidden = false;
-    drawScene();
-    updateDeviceList();
+function getSelectedDevices() {
+  return devices.filter((device) => selectedDeviceIds.has(device.id));
+}
+
+function updateSelectionSummary() {
+  selectionSummary.textContent =
+    selectedDeviceIds.size > 0 ? `Selected devices: ${selectedDeviceIds.size}` : 'No devices selected.';
+}
+
+function setSelection(ids, activeId) {
+  selectedDeviceIds = new Set(ids);
+  if (activeId && selectedDeviceIds.has(activeId)) {
+    activeDeviceId = activeId;
+  } else {
+    activeDeviceId = ids[0] ?? null;
+  }
+  renderSelection();
+}
+
+function toggleSelection(id) {
+  if (selectedDeviceIds.has(id)) {
+    selectedDeviceIds.delete(id);
+  } else {
+    selectedDeviceIds.add(id);
+  }
+  if (selectedDeviceIds.size === 0) {
+    activeDeviceId = null;
+  } else if (!selectedDeviceIds.has(activeDeviceId)) {
+    activeDeviceId = selectedDeviceIds.values().next().value;
+  } else if (selectedDeviceIds.has(id)) {
+    activeDeviceId = id;
+  }
+  renderSelection();
+}
+
+function updateActiveSelectionOptions() {
+  const selected = getSelectedDevices();
+  const isMulti = selected.length > 1;
+  activeSelectionGroup.hidden = !isMulti;
+  applySelectionGroup.hidden = !isMulti;
+  if (!isMulti) {
+    applyToAllToggle.checked = false;
     return;
   }
+  activeDeviceSelect.innerHTML = '';
+  selected.forEach((device) => {
+    const option = document.createElement('option');
+    option.value = String(device.id);
+    option.textContent = `${device.label} #${device.id}`;
+    activeDeviceSelect.appendChild(option);
+  });
+  activeDeviceSelect.value = String(activeDeviceId);
+}
 
-  deviceForm.hidden = false;
-  selectionPrompt.hidden = true;
+function updateActiveDeviceForm(device) {
   deviceName.value = device.label;
   posX.value = Math.round(device.x);
   posY.value = Math.round(device.y);
@@ -393,7 +442,25 @@ function selectDevice(id) {
   intensityInput.closest('.form-group').style.display = showIntensity ? 'flex' : 'none';
   reflectivityInput.closest('.form-group').style.display = showReflect ? 'flex' : 'none';
   segmentLengthInput.closest('.form-group').style.display = showLength ? 'flex' : 'none';
+}
 
+function renderSelection() {
+  updateSelectionSummary();
+  const activeDevice = getDeviceById(activeDeviceId);
+  if (!activeDevice) {
+    deviceForm.hidden = true;
+    selectionPrompt.hidden = false;
+    activeSelectionGroup.hidden = true;
+    applySelectionGroup.hidden = true;
+    drawScene();
+    updateDeviceList();
+    return;
+  }
+
+  deviceForm.hidden = false;
+  selectionPrompt.hidden = true;
+  updateActiveSelectionOptions();
+  updateActiveDeviceForm(activeDevice);
   drawScene();
   updateDeviceList();
 }
@@ -411,63 +478,108 @@ function updateDeviceList() {
     pill.type = 'button';
     pill.className = 'device-pill';
     pill.textContent = `${device.label} #${device.id}`;
-    if (device.id === selectedDeviceId) {
+    if (selectedDeviceIds.has(device.id)) {
       pill.style.borderColor = 'var(--accent)';
     }
-    pill.addEventListener('click', () => selectDevice(device.id));
+    if (device.id === activeDeviceId) {
+      pill.style.background = '#efe9ff';
+    }
+    pill.addEventListener('click', (event) => {
+      if (event.shiftKey) {
+        toggleSelection(device.id);
+        return;
+      }
+      setSelection([device.id], device.id);
+    });
     deviceList.appendChild(pill);
   });
 }
 
-function updateSelectedDevice(updateFn) {
-  const device = getDeviceById(selectedDeviceId);
-  if (!device) {
-    return;
-  }
-  updateFn(device);
+function applyToSelection(updateFn) {
+  const targets = applyToAllToggle.checked ? getSelectedDevices() : [getDeviceById(activeDeviceId)];
+  targets.forEach((device) => {
+    if (device) {
+      updateFn(device);
+    }
+  });
   drawScene();
   updateDeviceList();
+}
+
+function syncActivePosition() {
+  const active = getDeviceById(activeDeviceId);
+  if (!active) {
+    return;
+  }
+  posX.value = Math.round(active.x);
+  posY.value = Math.round(active.y);
+}
+
+function startDrag(point) {
+  if (selectedDeviceIds.size === 0) {
+    draggingState = null;
+    return;
+  }
+  const positions = new Map();
+  selectedDeviceIds.forEach((id) => {
+    const device = getDeviceById(id);
+    if (device) {
+      positions.set(id, { x: device.x, y: device.y });
+    }
+  });
+  draggingState = {
+    ids: [...selectedDeviceIds],
+    startPoint: point,
+    positions,
+  };
 }
 
 canvas.addEventListener('mousedown', (event) => {
   const point = getCanvasPoint(event);
   const target = [...devices].reverse().find((device) => hitTest(device, point));
   if (target) {
-    draggingId = target.id;
-    dragOffset = { x: target.x - point.x, y: target.y - point.y };
-    selectDevice(target.id);
-  } else {
-    selectDevice(null);
+    if (event.shiftKey) {
+      toggleSelection(target.id);
+      return;
+    }
+    if (!selectedDeviceIds.has(target.id)) {
+      setSelection([target.id], target.id);
+    } else {
+      activeDeviceId = target.id;
+      renderSelection();
+    }
+    startDrag(point);
+  } else if (!event.shiftKey) {
+    setSelection([], null);
   }
 });
 
 canvas.addEventListener('mousemove', (event) => {
-  if (!draggingId) {
+  if (!draggingState) {
     return;
   }
   const point = getCanvasPoint(event);
-  updateSelectedDevice((device) => {
-    device.x = snap(point.x + dragOffset.x);
-    device.y = snap(point.y + dragOffset.y);
-    posX.value = Math.round(device.x);
-    posY.value = Math.round(device.y);
+  const dx = point.x - draggingState.startPoint.x;
+  const dy = point.y - draggingState.startPoint.y;
+  draggingState.ids.forEach((id) => {
+    const device = getDeviceById(id);
+    const start = draggingState.positions.get(id);
+    if (device && start) {
+      device.x = snap(start.x + dx);
+      device.y = snap(start.y + dy);
+    }
   });
+  syncActivePosition();
+  drawScene();
+  updateDeviceList();
 });
 
 canvas.addEventListener('mouseup', () => {
-  draggingId = null;
+  draggingState = null;
 });
 
 canvas.addEventListener('mouseleave', () => {
-  draggingId = null;
-});
-
-canvas.addEventListener('click', (event) => {
-  const point = getCanvasPoint(event);
-  const target = [...devices].reverse().find((device) => hitTest(device, point));
-  if (target) {
-    selectDevice(target.id);
-  }
+  draggingState = null;
 });
 
 canvas.parentElement.addEventListener('dragover', (event) => {
@@ -483,7 +595,7 @@ canvas.parentElement.addEventListener('drop', (event) => {
   const point = getCanvasPoint(event);
   const device = createDevice(type, point.x, point.y);
   devices = [...devices, device];
-  selectDevice(device.id);
+  setSelection([device.id], device.id);
   updateDeviceList();
 });
 
@@ -502,7 +614,7 @@ snapToggle.addEventListener('change', () => {
 
 resetBtn.addEventListener('click', () => {
   devices = [];
-  selectDevice(null);
+  setSelection([], null);
   updateDeviceList();
 });
 
@@ -512,7 +624,7 @@ resetBtn.addEventListener('click', () => {
     if (!Number.isFinite(value)) {
       return;
     }
-    updateSelectedDevice((device) => {
+    applyToSelection((device) => {
       if (input === posX) {
         device.x = snap(value);
       } else {
@@ -527,7 +639,7 @@ angleInput.addEventListener('input', () => {
   if (!Number.isFinite(value)) {
     return;
   }
-  updateSelectedDevice((device) => {
+  applyToSelection((device) => {
     device.angle = value;
   });
 });
@@ -537,7 +649,7 @@ intensityInput.addEventListener('input', () => {
   if (!Number.isFinite(value)) {
     return;
   }
-  updateSelectedDevice((device) => {
+  applyToSelection((device) => {
     device.intensity = value;
   });
 });
@@ -547,7 +659,7 @@ reflectivityInput.addEventListener('input', () => {
   if (!Number.isFinite(value)) {
     return;
   }
-  updateSelectedDevice((device) => {
+  applyToSelection((device) => {
     device.reflectivity = value;
   });
 });
@@ -557,9 +669,18 @@ segmentLengthInput.addEventListener('input', () => {
   if (!Number.isFinite(value)) {
     return;
   }
-  updateSelectedDevice((device) => {
+  applyToSelection((device) => {
     device.length = value;
   });
+});
+
+activeDeviceSelect.addEventListener('change', () => {
+  const id = Number.parseInt(activeDeviceSelect.value, 10);
+  if (!Number.isFinite(id)) {
+    return;
+  }
+  activeDeviceId = id;
+  renderSelection();
 });
 
 deviceButtons.forEach((button) => {
@@ -570,5 +691,5 @@ deviceButtons.forEach((button) => {
 
 setCanvasSize();
 updateDeviceList();
-selectDevice(null);
+setSelection([], null);
 drawScene();

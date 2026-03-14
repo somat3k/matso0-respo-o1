@@ -29,5 +29,6 @@ This repository provides a lightweight holography planning surface where you can
 
 - Drag devices from the palette into the mesh board.
 - Click a device to edit its settings in the right-hand panel.
+- Hold Shift to multi-select devices and pick the active configuration from the dropdown.
 - Adjust the mesh size slider to match your custom build spacing.
 - Use the reset button to clear the board.
