@@ -1,0 +1,22 @@
+{
+  "name": "matso0-respo-o1",
+  "version": "1.0.0",
+  "description": "Holography simulation planner with mesh canvas and optical devices.",
+  "main": "app.js",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "echo \"No tests configured\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/somat3k/matso0-respo-o1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/somat3k/matso0-respo-o1/issues"
+  },
+  "homepage": "https://github.com/somat3k/matso0-respo-o1#readme"
+}
