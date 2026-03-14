@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Holography Simulation Planner</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <h1>Holography Simulation Planner</h1>
+        <p>Plan, configure, and visualize laser trajectories across galvanized mirrors and reflectors.</p>
+      </div>
+      <div class="status-card">
+        <span class="status-dot"></span>
+        <div>
+          <strong>Processing Handler</strong>
+          <p>Mesh rendering and optical calculations active.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="panel palette">
+        <h2>Modules &amp; Devices</h2>
+        <p class="subtitle">Drag devices onto the mesh canvas to build a system.</p>
+
+        <div class="module-list">
+          <div class="module-card">
+            <h3>Optics Module</h3>
+            <p>Handles beam propagation, angle correction, and reflection mapping.</p>
+          </div>
+          <div class="module-card">
+            <h3>Management Handler</h3>
+            <p>Tracks device inventory, settings, and simulation readiness.</p>
+          </div>
+          <div class="module-card">
+            <h3>Processing Module</h3>
+            <p>Calculates trajectory segments, mesh snapping, and visibility output.</p>
+          </div>
+        </div>
+
+        <div class="device-palette">
+          <h3>Device Palette</h3>
+          <button class="device-button" draggable="true" data-type="laser">Laser Source</button>
+          <button class="device-button" draggable="true" data-type="mirror">Galvanized Mirror</button>
+          <button class="device-button" draggable="true" data-type="reflector">Reflector Panel</button>
+          <button class="device-button" draggable="true" data-type="screen">Projection Screen</button>
+        </div>
+
+        <div class="notes">
+          <h3>System Notes</h3>
+          <ul>
+            <li>Use the mesh spacing slider to match DIY component grids.</li>
+            <li>Rotate mirrors to steer the laser through reflection points.</li>
+            <li>Select any device to adjust intensity, reflectivity, and angle.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="board">
+        <div class="toolbar">
+          <label>
+            Mesh Size
+            <input type="range" id="meshSize" min="20" max="80" value="40" />
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="snapToggle" checked />
+            <span>Snap to Mesh</span>
+          </label>
+          <button id="resetBtn">Reset Board</button>
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="simCanvas" width="960" height="600"></canvas>
+        </div>
+        <div class="board-footer">
+          <div>
+            <strong>System Projection</strong>
+            <p>Laser path is recalculated in real time as you move devices.</p>
+          </div>
+          <div id="projectionSummary" class="summary"></div>
+        </div>
+      </main>
+
+      <aside class="panel settings">
+        <h2>Device Settings</h2>
+        <p id="selectionPrompt" class="subtitle">Select a device on the canvas to configure it.</p>
+
+        <form id="deviceForm" class="device-form" hidden>
+          <div class="form-group">
+            <label for="deviceName">Device</label>
+            <input type="text" id="deviceName" readonly />
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="posX">X Position</label>
+              <input type="number" id="posX" step="1" />
+            </div>
+            <div class="form-group">
+              <label for="posY">Y Position</label>
+              <input type="number" id="posY" step="1" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="angle">Angle (deg)</label>
+            <input type="number" id="angle" min="0" max="360" step="1" />
+          </div>
+          <div class="form-group">
+            <label for="intensity">Laser Intensity</label>
+            <input type="range" id="intensity" min="0" max="100" value="85" />
+          </div>
+          <div class="form-group">
+            <label for="reflectivity">Mirror / Reflector Reflectivity</label>
+            <input type="range" id="reflectivity" min="10" max="100" value="90" />
+          </div>
+          <div class="form-group">
+            <label for="segmentLength">Mirror Segment Length</label>
+            <input type="number" id="segmentLength" min="40" max="140" step="5" />
+          </div>
+        </form>
+
+        <div class="manager">
+          <h3>Device Management</h3>
+          <div id="deviceList" class="device-list"></div>
+        </div>
+      </aside>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
