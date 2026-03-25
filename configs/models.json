@@ -1,0 +1,16 @@
+{
+  "inference": {
+    "provider": "groq",
+    "api_key_env": "GROQ_API_KEY",
+    "default_model": "configure-at-deploy-time"
+  },
+  "loaders": {
+    "rust_native": true,
+    "onnx": true,
+    "joblib": true
+  },
+  "artifacts": {
+    "root": "data/models",
+    "registry": "configs/models.json"
+  }
+}
