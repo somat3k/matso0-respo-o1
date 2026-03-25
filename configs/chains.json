@@ -1,0 +1,46 @@
+{
+  "chains": [
+    {
+      "id": 1,
+      "key": "ethereum",
+      "name": "Ethereum",
+      "rpc_env": "ETHEREUM_RPC_URL"
+    },
+    {
+      "id": 42161,
+      "key": "arbitrum",
+      "name": "Arbitrum One",
+      "rpc_env": "ARBITRUM_RPC_URL"
+    },
+    {
+      "id": 10,
+      "key": "optimism",
+      "name": "Optimism",
+      "rpc_env": "OPTIMISM_RPC_URL"
+    },
+    {
+      "id": 8453,
+      "key": "base",
+      "name": "Base",
+      "rpc_env": "BASE_RPC_URL"
+    },
+    {
+      "id": 999,
+      "key": "hyperevm",
+      "name": "HyperEVM",
+      "rpc_env": "HYPEREVM_RPC_URL"
+    },
+    {
+      "id": "solana-mainnet",
+      "key": "solana",
+      "name": "Solana",
+      "rpc_env": "SOLANA_RPC_URL"
+    },
+    {
+      "id": "aptos-mainnet",
+      "key": "aptos",
+      "name": "Aptos",
+      "rpc_env": "APTOS_RPC_URL"
+    }
+  ]
+}
