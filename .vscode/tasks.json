@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "docs:check",
+      "type": "shell",
+      "command": "python scripts/check_docs.py"
+    },
+    {
+      "label": "configs:validate",
+      "type": "shell",
+      "command": "python scripts/validate_configs.py"
+    },
+    {
+      "label": "regime:generate",
+      "type": "shell",
+      "command": "bash ./regime/create_regime_prompts.sh --project-name Regime --project-root . --input-docs docs --epics docs/16-roadmap-and-session-epics.md --connections docs/03-system-configuration.md --target-state docs/00-project-vademecum.md"
+    }
+  ]
+}
