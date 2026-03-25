@@ -1,0 +1,15 @@
+{
+  "project_name": "Regime",
+  "prompt_generation": {
+    "input_docs": "docs",
+    "epics": "docs/16-roadmap-and-session-epics.md",
+    "connections": "docs/03-system-configuration.md",
+    "target_state": "docs/00-project-vademecum.md",
+    "output_dir": "regime/generated"
+  },
+  "runtime": {
+    "workspace_mode": "single-repo",
+    "default_console": "bash",
+    "ui_shell": "slint"
+  }
+}
