@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Regime Task",
+  "type": "object",
+  "required": [
+    "task_id",
+    "title",
+    "status",
+    "epic_id"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "epic_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "todo",
+        "in_progress",
+        "blocked",
+        "done"
+      ]
+    },
+    "owner": {
+      "type": "string"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "read",
+        "simulate",
+        "staged_write",
+        "live_write"
+      ]
+    }
+  }
+}
