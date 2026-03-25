@@ -1,0 +1,16 @@
+{
+  "project": "Regime",
+  "environment": "development",
+  "paths": {
+    "docs": "docs",
+    "regime": "regime",
+    "configs": "configs",
+    "python": "python",
+    "crates": "crates"
+  },
+  "security": {
+    "vpn_required": true,
+    "allow_live_execution": false,
+    "require_human_approval": true
+  }
+}
