@@ -1,0 +1,14 @@
+/target
+/.venv
+/__pycache__
+/.idea
+.env
+.env.*
+node_modules
+.DS_Store
+*.log
+regime/generated/*.tmp
+regime/generated/*.bak
+postgres-data/
+redis-data/
+coverage/
