@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "channels": [
+    {
+      "name": "kernel.metrics",
+      "subscriber_types": [
+        "ui",
+        "audit",
+        "ops"
+      ]
+    },
+    {
+      "name": "market.ohlcv.normalized",
+      "subscriber_types": [
+        "features",
+        "backtest",
+        "chart",
+        "alerts"
+      ]
+    },
+    {
+      "name": "strategy.signals",
+      "subscriber_types": [
+        "risk",
+        "paper_exec",
+        "live_exec"
+      ]
+    },
+    {
+      "name": "execution.events",
+      "subscriber_types": [
+        "ledger",
+        "ui",
+        "alerts",
+        "analytics"
+      ]
+    }
+  ]
+}
