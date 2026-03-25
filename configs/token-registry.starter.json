@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "curation": "starter",
+  "warning": "Verify every mainnet address against project-approved registry before any live use.",
+  "assets": [
+    {
+      "chain": "ethereum",
+      "symbol": "ETH",
+      "name": "Ether",
+      "type": "native",
+      "address": null
+    },
+    {
+      "chain": "ethereum",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "type": "erc20",
+      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "source": "Circle"
+    },
+    {
+      "chain": "ethereum",
+      "symbol": "USDT",
+      "name": "Tether USD",
+      "type": "erc20",
+      "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "source": "Tether"
+    },
+    {
+      "chain": "arbitrum",
+      "symbol": "ETH",
+      "name": "Ether",
+      "type": "native",
+      "address": null
+    },
+    {
+      "chain": "arbitrum",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "type": "erc20",
+      "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "source": "Circle"
+    },
+    {
+      "chain": "base",
+      "symbol": "ETH",
+      "name": "Ether",
+      "type": "native",
+      "address": null
+    },
+    {
+      "chain": "base",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "type": "erc20",
+      "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "source": "Circle"
+    },
+    {
+      "chain": "optimism",
+      "symbol": "ETH",
+      "name": "Ether",
+      "type": "native",
+      "address": null
+    },
+    {
+      "chain": "optimism",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "type": "erc20",
+      "address": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+      "source": "Circle"
+    },
+    {
+      "chain": "polygon",
+      "symbol": "POL",
+      "name": "POL",
+      "type": "native",
+      "address": null
+    },
+    {
+      "chain": "polygon",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "type": "erc20",
+      "address": "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+      "source": "Circle"
+    },
+    {
+      "chain": "hyperevm",
+      "symbol": "HYPE",
+      "name": "HYPE",
+      "type": "native",
+      "address": null,
+      "transfer_system_address": "0x2222222222222222222222222222222222222222",
+      "source": "Hyperliquid Docs"
+    },
+    {
+      "chain": "hyperevm",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "type": "erc20",
+      "address": "0xb88339CB7199b77E23DB6E890353E22632Ba630f",
+      "source": "Circle"
+    },
+    {
+      "chain": "solana",
+      "symbol": "SOL",
+      "name": "Solana",
+      "type": "native",
+      "address": null
+    },
+    {
+      "chain": "solana",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "type": "spl",
+      "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "source": "Circle"
+    },
+    {
+      "chain": "solana",
+      "symbol": "USDT",
+      "name": "Tether USD",
+      "type": "spl",
+      "address": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+      "source": "Tether"
+    },
+    {
+      "chain": "aptos",
+      "symbol": "APT",
+      "name": "Aptos",
+      "type": "native",
+      "address": null
+    },
+    {
+      "chain": "aptos",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "type": "fa",
+      "address": "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
+      "source": "Circle"
+    },
+    {
+      "chain": "aptos",
+      "symbol": "USDT",
+      "name": "Tether USD",
+      "type": "fa",
+      "address": "0xf73e887a8754f540ee6e1a93bdc6dde2af69fc7ca5de32013e89dd44244473cb",
+      "source": "Tether"
+    }
+  ],
+  "sources": {
+    "circle_usdc_contracts": "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+    "tether_supported_protocols": "https://tether.to/ru/supported-protocols/",
+    "hyperliquid_hyperevm": "https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/hyperevm"
+  }
+}
