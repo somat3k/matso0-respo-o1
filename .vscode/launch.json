@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run UI Shell",
+      "type": "lldb",
+      "request": "launch",
+      "cargo": {
+        "args": ["run", "-p", "ui-shell"]
+      },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Run Python Train Stub",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/train_stub.py",
+      "console": "integratedTerminal"
+    }
+  ]
+}
